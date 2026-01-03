@@ -1,78 +1,79 @@
-Vehicle Rental System – SQL Database
-Overview
+# Vehicle Rental System – Database Overview
 
-This project demonstrates a vehicle rental system database with users, vehicles, and bookings. It includes practical SQL queries to retrieve, filter, and analyze booking and vehicle data.
+## Overview
+The Vehicle Rental System is a simple relational database designed to manage vehicle rentals efficiently.  
+It supports user management, vehicle inventory tracking, and booking operations.  
+This database structure is suitable for academic projects and beginner-to-intermediate SQL practice.
 
-Database Schema
-Users Table
-create table users (
-  user_id serial primary key,
-  name varchar(100) not null,
-  email varchar(100) unique not null,
-  password text not null,
-  phone_number text not null,
-  role text not null check (role in ('admin', 'customer'))
-);
+---
 
-Vehicles Table
-create table vehicles (
-  vehicle_id serial primary key,
-  vehicle_name varchar(100) not null,
-  type text not null check (type in ('car', 'bike', 'truck', 'SUV')),
-  model text not null,
-  registration_number text not null,
-  daily_rent_price int not null check (daily_rent_price > 0),
-  availability_status text not null check (availability_status in ('available', 'rented', 'maintenance'))
-);
+## Purpose
+The main purpose of this system is to:
+- Manage users such as admins and customers
+- Store and track rental vehicles
+- Handle vehicle booking records
+- Practice relational database concepts and SQL logic
 
-Bookings Table
-create table bookings (
-  booking_id serial primary key,
-  customer_id int references users(user_id),
-  vehicle_id int references vehicles(vehicle_id),
-  rent_start_date date not null,
-  rent_end_date date not null check (rent_end_date > rent_start_date),
-  total_price numeric not null check (total_price > 0),
-  status text not null check (status in ('pending', 'confirmed', 'completed', 'cancelled'))
-);
+---
 
-Example Queries
-1. Join Bookings with Users and Vehicles
-select
-  b.booking_id,
-  u.name as customer_name,
-  v.vehicle_name,
-  b.rent_start_date,
-  b.rent_end_date,
-  b.status
-from bookings b
-inner join users u on b.customer_id = u.user_id
-inner join vehicles v on b.vehicle_id = v.vehicle_id;
+## System Components
 
-2. Find All Available Vehicles
-select *
-from vehicles
-where availability_status != 'rented';
+### Users
+The system includes users with two roles:
+- **Admin** – manages vehicles and bookings
+- **Customer** – rents vehicles
 
-3. Find Available Cars
-select *
-from vehicles
-where type = 'car'
-  and availability_status = 'available';
+Each user has basic information such as name, email, phone number, and role.
 
-4. Vehicles with More Than 2 Bookings
-select
-  vehicle_name,
-  count(b.booking_id) as total_bookings
-from vehicles v
-inner join bookings b on v.vehicle_id = b.vehicle_id
-group by vehicle_name
-having count(b.booking_id) > 2;
+---
 
-Summary
+### Vehicles
+Vehicles represent the items available for rent.  
+Each vehicle includes:
+- Name and model
+- Vehicle type (car, bike, truck, SUV)
+- Registration number
+- Daily rental price
+- Availability status (available, rented, maintenance)
 
-Tables are connected using foreign keys.
+This helps track which vehicles can be rented at any time.
 
-Data validation is enforced with CHECK, NOT NULL, and UNIQUE constraints.
+---
 
-Queries demonstrate JOINs, filtering, and aggregation in SQL.
+### Bookings
+Bookings store rental transaction details.  
+Each booking connects:
+- A customer
+- A vehicle
+- Rental start and end dates
+- Total rental cost
+- Booking status (pending, confirmed, completed, cancelled)
+
+This structure ensures clear tracking of rental history.
+
+---
+
+## Functional Capabilities
+Using this database, you can:
+- View booking details along with customer and vehicle information
+- Identify vehicles that have never been rented
+- Find available vehicles by type
+- Analyze popular vehicles based on booking count
+
+---
+
+## Key Concepts Demonstrated
+- Relational database design
+- Primary and foreign key relationships
+- Data validation using constraints
+- Business logic through structured queries
+- Basic reporting and data analysis
+
+---
+
+## Use Case
+This project is ideal for:
+- SQL assignments
+- Database design practice
+- Learning how rental systems work internally
+- Backend foundation for a vehicle rental application
