@@ -51,9 +51,10 @@ from
 select
   *
 from
-  vehicles
+  vehicles as v
 where
-  not availability_status = 'rented';
+  not exists(select 1 from bookings as b
+  where b.vehicle_id = v.vehicle_id);
 
 -- * Query 3
 select
